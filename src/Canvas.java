@@ -22,11 +22,13 @@ public class Canvas extends JFrame implements MenuListener {
 		start_button = new JMenu("Start");
 		menu_bar.add(start_button);
 	
-
 		stop_button = new JMenu("Stop");
 		menu_bar.add(stop_button);
 		stop_button.setEnabled(false);
-
+		
+		reset_button = new JMenu("Reset");
+		menu_bar.add(reset_button);
+		reset_button.addMenuListener(this);
 		
 		game_board = new Board();
 		add(game_board);
@@ -49,7 +51,9 @@ public class Canvas extends JFrame implements MenuListener {
 	
 	@Override
 	public void menuSelected(MenuEvent e) {
-		if (e.getSource().equals(reset_button)) {		
+		if (e.getSource().equals(reset_button)) {
+			game_board.resetBoard();
+			game_board.repaint();
 		} 
 		else if (e.getSource().equals(start_button)) {
 			
