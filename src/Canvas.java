@@ -6,6 +6,15 @@ import javax.swing.JMenuBar;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+
+/**
+ * This class implements the JFrame for the 'Conways-Game-of-Life' 
+ * and also implements the game start and reset functionality. 
+ * @author Nikhil Hiremath, Idant 
+ * @version 1.0
+ */
+
+
 public class Canvas extends JFrame implements MenuListener {
 
 	private Thread game;
@@ -14,7 +23,10 @@ public class Canvas extends JFrame implements MenuListener {
 	private static final long serialVersionUID = 1L;
 	private JMenu start_button, stop_button, reset_button;
 
-
+	
+	/**
+	 * Create the Start, Stop and Reset buton and intialize the game_board
+	 */
 	public Canvas() {
 
 		menu_bar = new JMenuBar();
@@ -37,7 +49,7 @@ public class Canvas extends JFrame implements MenuListener {
 		add(game_board);
 	}
 
-
+	
 	public static void main(String[] args) {
 		JFrame main_frame = new Canvas();
 		main_frame.setTitle(CommonConstants.GAMENAME);
@@ -52,29 +64,24 @@ public class Canvas extends JFrame implements MenuListener {
 		main_frame.setVisible(true);
 	}
 
-
+	
+	/**
+	 * This starts and stops the game and enable & dissable the start and stop button
+	 * @param start_flag indicates the state of the game
+	 */
 	public void startGame(boolean start_flag) {
 		if (start_flag) {
+			start_button.setEnabled(false);
+			stop_button.setEnabled(true);
 			game = new Thread(game_board);
 			game.start();
 		} else {
+			start_button.setEnabled(true);
+			stop_button.setEnabled(false);
 			game.interrupt();
 		}
 	}
 	
-
-	@Override
-	public void menuSelected(MenuEvent e) {
-		if (e.getSource().equals(reset_button)) {
-			game_board.resetBoard();
-			game_board.repaint();		
-		} else if (e.getSource().equals(start_button)) {
-			startGame(true);
-		} else if (e.getSource().equals(stop_button)) {
-			startGame(false);
-		} 	
-	}
-
 
 	@Override
 	public void menuDeselected(MenuEvent e) {
@@ -83,5 +90,10 @@ public class Canvas extends JFrame implements MenuListener {
 
 	@Override
 	public void menuCanceled(MenuEvent e) {
+	}
+
+
+	@Override
+	public void menuSelected(MenuEvent e) {
 	}
 }
