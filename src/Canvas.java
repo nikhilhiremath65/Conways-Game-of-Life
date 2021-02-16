@@ -8,6 +8,7 @@ import javax.swing.event.MenuListener;
 
 public class Canvas extends JFrame implements MenuListener {
 
+	private Thread game;
 	private JMenuBar menu_bar;
 	private Board game_board;
 	private static final long serialVersionUID = 1L;
@@ -21,15 +22,17 @@ public class Canvas extends JFrame implements MenuListener {
 
 		start_button = new JMenu("Start");
 		menu_bar.add(start_button);
-	
+		start_button.addMenuListener(this);
+
 		stop_button = new JMenu("Stop");
 		menu_bar.add(stop_button);
 		stop_button.setEnabled(false);
-		
+		stop_button.addMenuListener(this);
+
 		reset_button = new JMenu("Reset");
 		menu_bar.add(reset_button);
 		reset_button.addMenuListener(this);
-		
+
 		game_board = new Board();
 		add(game_board);
 	}
@@ -48,18 +51,27 @@ public class Canvas extends JFrame implements MenuListener {
 
 		main_frame.setVisible(true);
 	}
+
+
+	public void startGame(boolean start_flag) {
+		if (start_flag) {
+			game = new Thread(game_board);
+			game.start();
+		} else {
+			game.interrupt();
+		}
+	}
 	
+
 	@Override
 	public void menuSelected(MenuEvent e) {
 		if (e.getSource().equals(reset_button)) {
 			game_board.resetBoard();
-			game_board.repaint();
-		} 
-		else if (e.getSource().equals(start_button)) {
-			
-		} 
-		else if (e.getSource().equals(stop_button)) {
-		
+			game_board.repaint();		
+		} else if (e.getSource().equals(start_button)) {
+			startGame(true);
+		} else if (e.getSource().equals(stop_button)) {
+			startGame(false);
 		} 	
 	}
 
