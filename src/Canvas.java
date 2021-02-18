@@ -1,8 +1,12 @@
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JMenu;
 import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
@@ -15,13 +19,13 @@ import javax.swing.event.MenuListener;
  */
 
 
-public class Canvas extends JFrame implements MenuListener {
+public class Canvas extends JFrame implements MenuListener, ActionListener {
 
 	private Thread game;
 	private JMenuBar menu_bar;
 	private Board game_board;
 	private static final long serialVersionUID = 1L;
-	private JMenu start_button, stop_button, reset_button;
+	private JMenuItem start_button, stop_button, reset_button;
 
 	
 	/**
@@ -32,18 +36,18 @@ public class Canvas extends JFrame implements MenuListener {
 		menu_bar = new JMenuBar();
 		setJMenuBar(menu_bar);
 
-		start_button = new JMenu("Start");
+		start_button = new JMenuItem("Start");
 		menu_bar.add(start_button);
-		start_button.addMenuListener(this);
+		start_button.addActionListener(this);
 
-		stop_button = new JMenu("Stop");
+		stop_button = new JMenuItem("Stop");
 		menu_bar.add(stop_button);
 		stop_button.setEnabled(false);
-		stop_button.addMenuListener(this);
+		stop_button.addActionListener(this);
 
-		reset_button = new JMenu("Reset");
+		reset_button = new JMenuItem("Reset");
 		menu_bar.add(reset_button);
-		reset_button.addMenuListener(this);
+		reset_button.addActionListener(this);
 
 		game_board = new Board();
 		add(game_board);
@@ -82,6 +86,17 @@ public class Canvas extends JFrame implements MenuListener {
 		}
 	}
 	
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource().equals(stop_button)) {
+            startGame(false);
+		}
+		else if(e.getSource().equals(start_button))
+			startGame(true);
+		else if(e.getSource().equals(reset_button))
+			game_board.resetBoard();
+	}
 
 	@Override
 	public void menuDeselected(MenuEvent e) {
@@ -96,4 +111,7 @@ public class Canvas extends JFrame implements MenuListener {
 	@Override
 	public void menuSelected(MenuEvent e) {
 	}
+
+
+	
 }
