@@ -149,6 +149,14 @@ public class Board extends JPanel implements  ComponentListener,MouseListener,
  
 	@Override
 	public void run() {
+		point = getNextBoardState();
+		repaint();
+		try {
+			Thread.sleep(1000);
+			run();
+		}catch(InterruptedException ie) {
+			
+		}
 	}
 
 
