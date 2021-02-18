@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.List;
 
 
 public class Board extends JPanel implements  ComponentListener,MouseListener,
@@ -84,6 +85,38 @@ public class Board extends JPanel implements  ComponentListener,MouseListener,
         } catch (ConcurrentModificationException e) {}
     }
 
+    // Checks boundaries and if cell is live
+    private int incrementIfNeighbour(int i, int j){
+        return (i >= 0 && j >= 0 && i < boardSize.width &&
+                j < boardSize.height && point.contains(new Point(i, j))) ? 1: 0;
+    }
+
+    // Returns the next set of points in the board that should be alive
+    private ArrayList<Point> getNextBoardState(){
+        int neighbours_count;
+        int[] neighbour_directions = new int[]{-1, 0, 1};
+        ArrayList<Point> nextBoardPoints = new ArrayList<>();
+        for (int i = 0; i <= boardSize.width; i++) {
+            for (int j = 0; j <= boardSize.height; j++) {
+                neighbours_count = 0;
+                for (int d_x = 0; d_x < neighbour_directions.length; d_x++){
+                    for ( int d_y = 0; d_y < neighbour_directions.length; d_y++){
+                        if (neighbour_directions[d_x] == 0 && neighbour_directions[d_y] == 0)
+                            continue;
+                        neighbours_count += incrementIfNeighbour(i + neighbour_directions[d_x],
+                                j + neighbour_directions[d_y]);
+                    }
+                }
+                if (neighbours_count == 3) {
+                    nextBoardPoints.add(new Point(i, j));
+                }
+                else if(neighbours_count == 2 && point.contains(new Point(i, j))){
+                    nextBoardPoints.add(new Point(i, j));
+                }
+            }
+        }
+        return nextBoardPoints;
+    }
     
     @Override
     public void paintComponent(Graphics g) {
