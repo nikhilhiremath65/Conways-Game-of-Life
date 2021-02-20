@@ -12,43 +12,49 @@ import javax.swing.event.MenuListener;
  * This class implements the JFrame for the 'Conways-Game-of-Life' and also
  * implements the game start and reset functionality.
  * 
- * @author Nikhil Hiremath, Idant
  * @version 1.0
  */
 
 public class Canvas extends JFrame implements MenuListener, ActionListener {
 
     private Thread game;
-    private JMenuBar menu_bar;
-    private Board game_board;
+    private JMenuBar menuBar;
+    private Board gameBoard;
     private static final long serialVersionUID = 1L;
-    private JMenuItem start_button, stop_button, reset_button;
+    private JMenuItem startButton, stopButton, resetButton;
 
     /**
-     * Initialize the game_board.
+     * Canvas Constructor. Generates menubar, buttons and game board.
      */
     public Canvas() {
 
-        menu_bar = new JMenuBar();
-        setJMenuBar(menu_bar);
+        menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
 
-        start_button = new JMenuItem("Start");
-        menu_bar.add(start_button);
-        start_button.addActionListener(this);
+        startButton = new JMenuItem("Start");
+        menuBar.add(startButton);
+        startButton.addActionListener(this);
 
-        stop_button = new JMenuItem("Stop");
-        menu_bar.add(stop_button);
-        stop_button.setEnabled(false);
-        stop_button.addActionListener(this);
+        stopButton = new JMenuItem("Stop");
+        menuBar.add(stopButton);
+        stopButton.setEnabled(false);
+        stopButton.addActionListener(this);
 
-        reset_button = new JMenuItem("Reset");
-        menu_bar.add(reset_button);
-        reset_button.addActionListener(this);
+        resetButton = new JMenuItem("Reset");
+        menuBar.add(resetButton);
+        resetButton.addActionListener(this);
 
-        game_board = new Board();
-        add(game_board);
+        gameBoard = new Board();
+        add(gameBoard);
     }
 
+    /*
+     * Main Function. Creates Canvas and sets basic configurations for the
+     * frame.
+     * 
+     * @param args[] arguement array for main.
+     *
+     */
     public static void main(String[] args) {
         JFrame main_frame = new Canvas();
         main_frame.setTitle(CommonConstants.GAMENAME);
@@ -67,17 +73,17 @@ public class Canvas extends JFrame implements MenuListener, ActionListener {
      * This starts and stops the game and enable & disable the start and stop
      * button
      * 
-     * @param start_flag indicates the state of the game
+     * @param startFlag indicates the state of the game
      */
-    public void startGame(boolean start_flag) {
-        if (start_flag) {
-            start_button.setEnabled(false);
-            stop_button.setEnabled(true);
-            game = new Thread(game_board);
+    public void startGame(boolean startFlag) {
+        if (startFlag) {
+            startButton.setEnabled(false);
+            stopButton.setEnabled(true);
+            game = new Thread(gameBoard);
             game.start();
         } else {
-            start_button.setEnabled(true);
-            stop_button.setEnabled(false);
+            startButton.setEnabled(true);
+            stopButton.setEnabled(false);
             game.interrupt();
         }
     }
@@ -85,15 +91,17 @@ public class Canvas extends JFrame implements MenuListener, ActionListener {
     /**
      * This method captures events from stop, start and reset buttons to perform
      * actions
+     * 
+     * @param e Action event object.
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(stop_button)) {
+        if (e.getSource().equals(stopButton)) {
             startGame(false);
-        } else if (e.getSource().equals(start_button)) {
+        } else if (e.getSource().equals(startButton)) {
             startGame(true);
-        } else if (e.getSource().equals(reset_button)) {
-            game_board.resetBoard();
+        } else if (e.getSource().equals(resetButton)) {
+            gameBoard.resetBoard();
         }
     }
 
